@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "73350727897",
+    "project_id": "doc-finder-e13d0",
+    "storage_bucket": "doc-finder-e13d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73350727897:android:04c3c7c19b58ac705596c8",
+        "android_client_info": {
+          "package_name": "com.example.finder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcBDU59ur0fR1GGM6eF44vdhkEMfR8INY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
