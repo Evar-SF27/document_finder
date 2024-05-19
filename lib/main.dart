@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finder/firebase_options.dart';
+import 'package:finder/theme/palette.dart';
 import 'package:finder/view/onboarding/screens/boarding.dart';
 import 'package:finder/view/onboarding/screens/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -38,6 +39,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Finder',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              foregroundColor: Palette.whiteColor,
+              shape: CircleBorder(),
+              extendedPadding: EdgeInsets.all(20),
+              backgroundColor: Palette.primaryColor)),
       navigatorKey: navigatorKey,
       home: const SplashScreen(),
     );

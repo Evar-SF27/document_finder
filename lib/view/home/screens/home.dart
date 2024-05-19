@@ -1,3 +1,5 @@
+import 'package:finder/theme/palette.dart';
+import 'package:finder/view/home/admin/add.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,6 +25,46 @@ class UserHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container();
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Document Finder'),
+          actions: [
+            IconButton(
+                icon:
+                    const Icon(Icons.supervised_user_circle_rounded, size: 40),
+                onPressed: () {})
+          ],
+        ),
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: SingleChildScrollView(
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 10),
+                    decoration: BoxDecoration(
+                        color: Palette.primaryColor,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, AddDocument.route());
+                      },
+                      child: const Text('Report Document',
+                          style: TextStyle(
+                              color: Palette.whiteColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  )
+                ],
+              )
+            ]),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {}, child: Icon(Icons.chat_bubble)));
   }
 }
