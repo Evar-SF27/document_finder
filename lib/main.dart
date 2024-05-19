@@ -40,6 +40,12 @@ class _MyAppState extends State<MyApp> {
       title: 'Finder',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                  backgroundColor: Palette.primaryColor,
+                  foregroundColor: Palette.whiteColor)),
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
               foregroundColor: Palette.whiteColor,
               shape: CircleBorder(),
