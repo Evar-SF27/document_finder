@@ -26,6 +26,7 @@ class _AuthFieldState extends State<AuthField> {
             hintText: widget.hint,
             hintStyle: const TextStyle(fontSize: 18),
             filled: true,
+            fillColor: Palette.greyColor.withOpacity(0.1),
             contentPadding: const EdgeInsets.all(22),
             suffixIcon: widget.isPassword
                 ? (hidden

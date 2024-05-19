@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserHomePage extends ConsumerWidget {
+class AdminHomePage extends ConsumerWidget {
   static route() => PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            const UserHomePage(),
+            const AdminHomePage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;
@@ -19,7 +19,7 @@ class UserHomePage extends ConsumerWidget {
           );
         },
       );
-  const UserHomePage({super.key});
+  const AdminHomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

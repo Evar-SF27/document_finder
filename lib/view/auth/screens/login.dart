@@ -63,61 +63,58 @@ class _LoginViewState extends ConsumerState<LoginView> {
     return Scaffold(
       body: isLoading
           ? const LoadingScreen()
-          : Container(
-              child: Center(
-                child: SingleChildScrollView(
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(children: [
-                          const Headline(subtitle: "Log into your account"),
-                          const SizedBox(height: 50),
-                          AuthField(controller: emailController, hint: 'Email'),
-                          const SizedBox(height: 20),
-                          AuthField(
-                              controller: passwordController,
-                              hint: 'Password',
-                              isPassword: true),
-                          const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                  onTap: redirectResetPassword,
-                                  child: const Text(
-                                    'Forgot Password?',
-                                    style:
-                                        TextStyle(color: Palette.primaryColor),
-                                  )),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Align(
-                              alignment: Alignment.topRight,
-                              child: ExpandedButton(
-                                onPress: onLogIn,
-                                text: 'Log In',
-                              )),
-                          const SizedBox(height: 30),
-                          RichText(
-                            text: TextSpan(
-                                text: "Don't have an account?",
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.black),
-                                children: [
-                                  TextSpan(
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          Navigator.push(
-                                              context, RegisterView.route());
-                                        },
-                                      text: ' Register',
-                                      style: const TextStyle(
-                                          color: Palette.primaryColor,
-                                          fontSize: 16))
-                                ]),
-                          )
-                        ]))),
-              ),
+          : Center(
+              child: SingleChildScrollView(
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(children: [
+                        const Headline(subtitle: "Log into your account"),
+                        const SizedBox(height: 50),
+                        AuthField(controller: emailController, hint: 'Email'),
+                        const SizedBox(height: 20),
+                        AuthField(
+                            controller: passwordController,
+                            hint: 'Password',
+                            isPassword: true),
+                        const SizedBox(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                                onTap: redirectResetPassword,
+                                child: const Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(color: Palette.primaryColor),
+                                )),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Align(
+                            alignment: Alignment.topRight,
+                            child: ExpandedButton(
+                              onPress: onLogIn,
+                              text: 'Log In',
+                            )),
+                        const SizedBox(height: 30),
+                        RichText(
+                          text: TextSpan(
+                              text: "Don't have an account?",
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.black),
+                              children: [
+                                TextSpan(
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.push(
+                                            context, RegisterView.route());
+                                      },
+                                    text: ' Register',
+                                    style: const TextStyle(
+                                        color: Palette.primaryColor,
+                                        fontSize: 16))
+                              ]),
+                        )
+                      ]))),
             ),
     );
   }

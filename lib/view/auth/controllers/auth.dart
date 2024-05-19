@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:finder/view/home/screens/entry.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +9,6 @@ import 'package:finder/apis/user.dart';
 import 'package:finder/models/user.dart' as user_model;
 import 'package:finder/utils/utils.dart';
 import 'package:finder/view/auth/screens/login.dart';
-import 'package:finder/view/home/screens/home.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {
@@ -81,7 +81,7 @@ class AuthController extends StateNotifier<bool> {
     state = false;
 
     res.fold((l) => showSnackBar(context, l.message, true), (r) {
-      Navigator.push(context, HomePage.route());
+      Navigator.push(context, EntryPage.route());
       showSnackBar(context, 'User is succcessfully logged in', false);
     });
   }
