@@ -46,7 +46,7 @@ class DocumentController extends StateNotifier<bool> {
 
     final new_res = await documentAPI.saveDocument(doc);
     new_res.fold((l) => showSnackBar(context, l.message, true), (r) {
-      Navigator.push(context, AdminHomePage.route());
+      Navigator.pop(context);
 
       return showSnackBar(context, 'Document was added successfully', false);
     });

@@ -33,7 +33,10 @@ class DocumentAPI {
   }
 
   Future<String> uploadImage(File file) async {
-    final name = file.path;
+    var path = file.path;
+    var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
+    var name = path.substring(lastSeparator + 1, path.length);
+
     final ref = storage.ref().child('files/$name');
     final uploadTask = ref.putFile(file);
 

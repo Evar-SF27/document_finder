@@ -1,3 +1,5 @@
+import 'package:finder/common/widgets/error.dart';
+import 'package:finder/common/widgets/loading.dart';
 import 'package:finder/view/auth/controllers/auth.dart';
 import 'package:finder/view/home/screens/admin.dart';
 import 'package:finder/view/home/screens/home.dart';
@@ -26,9 +28,12 @@ class EntryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userDoc = ref.watch(currentUserDetailsProvider).value;
-    final role = userDoc!.value?.role;
-
-    return role == 'user' ? const UserHomePage() : const AdminHomePage();
+    return ref.watch(currentUserDetailsProvider).when(
+        data: (user) {
+          final role = user.value!.role;
+          return role == 'user' ? const UserHomePage() : const AdminHomePage();
+        },
+        error: (err, st) => Error(error: err.toString()),
+        loading: () => const Loader());
   }
 }
