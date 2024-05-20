@@ -17,7 +17,7 @@ class DocumentAPI {
   FirebaseStorage storage;
   DocumentAPI({required this.db, required this.storage});
 
-  Future<List<Map<String, dynamic>>> getAllDocument(String uid) async {
+  Future<List<Map<String, dynamic>>> getAllDocument() async {
     final document = await db.collection("documents").get();
     final data = document.docs;
     final documents = data.map((e) => e.data()).toList();
@@ -28,6 +28,14 @@ class DocumentAPI {
   Future<Map<String, dynamic>?> getDocument(String uid) async {
     final document = await db.collection("documents").doc(uid).get();
     final data = document.data();
+
+    return data;
+  }
+
+  Future<List<dynamic>> getDocumentByHost(String hostId) async {
+    final documents =
+        await db.collection("documents").where('host', isEqualTo: hostId).get();
+    final data = documents.docs;
 
     return data;
   }

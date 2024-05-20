@@ -18,12 +18,47 @@ final uploadDocumentImageProvider = FutureProvider.family((ref, File file) {
   return ref.watch(documentControllerProvider.notifier).uploadImage(file);
 });
 
+final getDocumentById = FutureProvider.family((ref, String uid) {
+  return ref.watch(documentControllerProvider.notifier).getDocumentById(uid);
+});
+
+final getDocumentByHostId = FutureProvider.family((ref, String hostId) {
+  return ref
+      .watch(documentControllerProvider.notifier)
+      .getDocumentByHostId(hostId);
+});
+
+final getAllDocuments = FutureProvider((ref) {
+  return ref.watch(documentControllerProvider.notifier).getDocuments();
+});
+
 class DocumentController extends StateNotifier<bool> {
   final DocumentAPI documentAPI;
   DocumentController({required this.documentAPI}) : super(false);
 
   Future<String> uploadImage(File file) {
     return documentAPI.uploadImage(file);
+  }
+
+  Future<DocumentModel?> getDocumentById(String uid) async {
+    final docs = await documentAPI.getDocument(uid);
+    final document = docs == null ? null : DocumentModel.fromMap(docs);
+
+    return document;
+  }
+
+  Future<List<DocumentModel>> getDocumentByHostId(String hostId) async {
+    final data = await documentAPI.getDocumentByHost(hostId);
+    final document = data.map((e) => DocumentModel.fromMap(e.data())).toList();
+
+    return document;
+  }
+
+  Future<List<DocumentModel>> getDocuments() async {
+    final docs = await documentAPI.getAllDocument();
+    final documents = docs.map((e) => DocumentModel.fromMap(e)).toList();
+
+    return documents;
   }
 
   void postDocument(

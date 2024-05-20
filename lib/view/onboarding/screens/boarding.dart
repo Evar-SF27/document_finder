@@ -1,4 +1,6 @@
+import 'package:finder/view/auth/controllers/auth.dart';
 import 'package:finder/view/auth/screens/login.dart';
+import 'package:finder/view/home/screens/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,6 +14,9 @@ class BoardingScreen extends ConsumerStatefulWidget {
 class _BoardingScreenState extends ConsumerState<BoardingScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: LoginView());
+    final user = ref.read(currentUserProvider);
+    final isUser = user.value?.uid;
+    return Scaffold(
+        body: isUser == null ? const LoginView() : const EntryPage());
   }
 }

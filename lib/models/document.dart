@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 class DocumentModel {
   final String name;
   final String type;
-  final List<String> images;
+  final List<dynamic> images;
   final DateTime foundAt;
   final String host;
   final String location;
@@ -22,7 +22,7 @@ class DocumentModel {
   DocumentModel copyWith({
     String? name,
     String? type,
-    List<String>? images,
+    List<dynamic>? images,
     DateTime? foundAt,
     String? host,
     String? location,
@@ -52,7 +52,9 @@ class DocumentModel {
     return DocumentModel(
       name: map['name'] as String,
       type: map['type'] as String,
-      images: List<String>.from((map['images'] as List<String>)),
+      images: ((map['images'] as List<dynamic>))
+          .map((img) => img.toString())
+          .toList(),
       foundAt: DateTime.fromMillisecondsSinceEpoch(map['foundAt'] as int),
       host: map['host'] as String,
       location: map['location'] as String,
