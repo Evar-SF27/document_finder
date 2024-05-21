@@ -25,6 +25,10 @@ class DocumentAPI {
     return documents;
   }
 
+  Future<void> deleteDocument(String docId) async {
+    await db.collection('documents').doc(docId).delete();
+  }
+
   Future<Map<String, dynamic>?> getDocument(String uid) async {
     final document = await db.collection("documents").doc(uid).get();
     final data = document.data();

@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:finder/apis/document.dart';
 import 'package:finder/models/document.dart';
-import 'package:finder/view/home/screens/admin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finder/utils/utils.dart';
@@ -20,6 +19,10 @@ final uploadDocumentImageProvider = FutureProvider.family((ref, File file) {
 
 final getDocumentById = FutureProvider.family((ref, String uid) {
   return ref.watch(documentControllerProvider.notifier).getDocumentById(uid);
+});
+
+final deleteDocumentById = FutureProvider.family((ref, String docId) {
+  return ref.watch(documentControllerProvider.notifier).deleteDocument(docId);
 });
 
 final getDocumentByHostId = FutureProvider.family((ref, String hostId) {
@@ -52,6 +55,10 @@ class DocumentController extends StateNotifier<bool> {
     final document = data.map((e) => DocumentModel.fromMap(e.data())).toList();
 
     return document;
+  }
+
+  Future<void> deleteDocument(String docId) async {
+    await documentAPI.deleteDocument(docId);
   }
 
   Future<List<DocumentModel>> getDocuments() async {

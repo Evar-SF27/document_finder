@@ -3,6 +3,7 @@ import 'package:finder/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class DocumentCard extends ConsumerStatefulWidget {
   final DocumentModel document;
@@ -18,8 +19,8 @@ class _DocumentCardState extends ConsumerState<DocumentCard> {
     final name = widget.document.name;
     final type = widget.document.type;
     final location = widget.document.location;
-    final date = widget.document.foundAt;
-    final fdate = date.millisecondsSinceEpoch;
+    final date = timeago.format(DateTime.fromMillisecondsSinceEpoch(
+        widget.document.foundAt.millisecondsSinceEpoch));
     return Container(
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -59,7 +60,7 @@ class _DocumentCardState extends ConsumerState<DocumentCard> {
                   style: GoogleFonts.abel(
                       textStyle: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16))),
-              Text('$fdate',
+              Text(date,
                   style: GoogleFonts.abel(
                       textStyle: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16)))
@@ -90,7 +91,9 @@ class _DocumentCardState extends ConsumerState<DocumentCard> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    // ref.read(deleteDocumentById(widget.document));
+                  },
                   child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
