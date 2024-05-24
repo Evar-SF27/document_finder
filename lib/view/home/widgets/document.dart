@@ -26,7 +26,15 @@ class _DocumentCardState extends ConsumerState<DocumentCard> {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       // height: 500,
       decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
+          // color: Colors.grey.withOpacity(0.1),
+          gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Palette.greyColor,
+                Palette.whiteColor,
+                Palette.greyColor
+              ]),
           borderRadius: BorderRadius.circular(20)),
       child: Column(
         children: [

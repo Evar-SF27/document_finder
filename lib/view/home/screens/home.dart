@@ -64,6 +64,7 @@ class UserHomePage extends ConsumerWidget {
                   )
                 ],
               ),
+              const SizedBox(height: 15),
               ref.watch(getDocumentByHostId(id)).when(
                   data: (documents) {
                     return SizedBox(

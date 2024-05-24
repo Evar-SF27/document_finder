@@ -8,5 +8,5 @@ class Palette {
   static const Color successColor = Colors.green;
   static const Color errorColor = Colors.redAccent;
   static const Color warningColor = Color.fromARGB(255, 255, 174, 82);
-  static const Color greyColor = Colors.grey;
+  static const Color greyColor = Color.fromARGB(255, 228, 228, 228);
 }
