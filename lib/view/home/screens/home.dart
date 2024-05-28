@@ -1,15 +1,17 @@
+import 'dart:async';
+
 import 'package:finder/theme/palette.dart';
 import 'package:finder/view/home/admin/add.dart';
 import 'package:finder/view/home/admin/controllers/document.dart';
 import 'package:finder/view/home/widgets/document.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class UserHomePage extends ConsumerWidget {
-  final String id;
-  static route(String id) => PageRouteBuilder(
+class UserHomePage extends ConsumerStatefulWidget {
+  static route() => PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            UserHomePage(id: id),
+            const UserHomePage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;
@@ -24,10 +26,38 @@ class UserHomePage extends ConsumerWidget {
           );
         },
       );
-  const UserHomePage({super.key, required this.id});
+  const UserHomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _UserHomePageState();
+}
+
+class _UserHomePageState extends ConsumerState<UserHomePage> {
+  var allDocuments = [];
+  var filteredDocuments = [];
+  String _search = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final textFieldBorder = OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5),
+        borderSide: BorderSide(
+          color: Palette.greyColor.withOpacity(0.05),
+        ));
+
+    void applySearchFilters() {
+      setState(() {
+        print(_search);
+        filteredDocuments = allDocuments.where((doc) {
+          bool filterByName =
+              doc.name.toLowerCase().contains(_search.toLowerCase());
+
+          return filterByName;
+        }).toList();
+        // print(filteredDocuments);
+      });
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Document Finder'),
@@ -39,49 +69,68 @@ class UserHomePage extends ConsumerWidget {
           ],
         ),
         body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: SingleChildScrollView(
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 10),
-                    decoration: BoxDecoration(
-                        color: Palette.primaryColor,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, AddDocument.route());
-                      },
-                      child: const Text('Report Document',
-                          style: TextStyle(
-                              color: Palette.whiteColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  )
-                ],
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Column(children: [
+            SizedBox(
+              height: 60,
+              child: TextField(
+                onChanged: (value) {
+                  _search = value.toString();
+                  applySearchFilters();
+                },
+                onSubmitted: (value) {
+                  applySearchFilters();
+                },
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10).copyWith(left: 20),
+                    prefixIcon: const Icon(Icons.search),
+                    filled: true,
+                    fillColor: Palette.greyColor.withOpacity(0.3),
+                    enabledBorder: textFieldBorder,
+                    focusedBorder: textFieldBorder,
+                    hintText: 'Search Places'),
               ),
-              const SizedBox(height: 15),
-              ref.watch(getDocumentByHostId(id)).when(
-                  data: (documents) {
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Text('Reported Documents',
+                  style: GoogleFonts.abel(
+                      textStyle: const TextStyle(
+                          fontWeight: FontWeight.w900, fontSize: 24)))
+            ]),
+            FutureBuilder(
+                future: ref
+                    .read(documentControllerProvider.notifier)
+                    .getDocuments(),
+                builder: (conttext, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator while waiting for the Future to complete
                     return SizedBox(
-                      height: MediaQuery.of(context).size.height - 50,
+                        width: 25,
+                        height: 25,
+                        child: CircularProgressIndicator.adaptive());
+                  } else if (snapshot.hasError) {
+                    // Show an error message if the Future throws an error
+                    return Text('Error(s): ${snapshot}');
+                  } else {
+                    if (allDocuments.isEmpty) {
+                      allDocuments = snapshot.data!;
+                      filteredDocuments = List.from(allDocuments);
+                    }
+                    print(filteredDocuments);
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height - 217,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
-                          itemCount: documents.length,
+                          itemCount: filteredDocuments.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return DocumentCard(document: documents[index]);
+                            return DocumentCard(
+                                document: filteredDocuments[index]);
                           }),
                     );
-                  },
-                  error: (err, st) => Container(),
-                  loading: () => const Text('Documents are loading'))
-            ]),
-          ),
+                  }
+                })
+          ]),
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {}, child: const Icon(Icons.chat_bubble)));

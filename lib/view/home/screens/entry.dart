@@ -32,8 +32,8 @@ class EntryPage extends ConsumerWidget {
         data: (user) {
           final role = user.value!.role;
           return role == 'user'
-              ? UserHomePage(id: user.value!.uid)
-              : const AdminHomePage();
+              ? const UserHomePage()
+              : AdminHomePage(id: user.value!.uid);
         },
         error: (err, st) => Error(error: err.toString()),
         loading: () => const Loader());
