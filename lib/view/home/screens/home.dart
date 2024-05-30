@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:finder/theme/palette.dart';
-import 'package:finder/view/home/admin/add.dart';
 import 'package:finder/view/home/admin/controllers/document.dart';
 import 'package:finder/view/home/widgets/document.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +44,6 @@ class _UserHomePageState extends ConsumerState<UserHomePage> {
 
     void applySearchFilters() {
       setState(() {
-        print(_search);
         filteredDocuments = allDocuments.where((doc) {
           bool filterByName =
               doc.name.toLowerCase().contains(_search.toLowerCase());
@@ -104,19 +100,18 @@ class _UserHomePageState extends ConsumerState<UserHomePage> {
                 builder: (conttext, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for the Future to complete
-                    return SizedBox(
+                    return const SizedBox(
                         width: 25,
                         height: 25,
                         child: CircularProgressIndicator.adaptive());
                   } else if (snapshot.hasError) {
                     // Show an error message if the Future throws an error
-                    return Text('Error(s): ${snapshot}');
+                    return Text('Error(s): $snapshot');
                   } else {
                     if (allDocuments.isEmpty) {
                       allDocuments = snapshot.data!;
                       filteredDocuments = List.from(allDocuments);
                     }
-                    print(filteredDocuments);
                     return SizedBox(
                       height: MediaQuery.of(context).size.height - 217,
                       width: MediaQuery.of(context).size.width,

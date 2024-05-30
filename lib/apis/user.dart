@@ -22,7 +22,7 @@ class UserAPI {
   FutureEitherVoid saveUserData(User userModel, String uid) async {
     try {
       final user = userModel.toMap();
-      await db.collection("users").doc(uid).set(user);
+      await db.collection("users").doc(userModel.uid).set(user);
 
       return right(null);
     } on FirebaseException catch (e, st) {

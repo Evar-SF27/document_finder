@@ -1,5 +1,7 @@
 import 'package:finder/models/document.dart';
 import 'package:finder/theme/palette.dart';
+import 'package:finder/view/auth/controllers/auth.dart';
+import 'package:finder/view/chats/screens/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,7 +9,8 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class DocumentCard extends ConsumerStatefulWidget {
   final DocumentModel document;
-  const DocumentCard({super.key, required this.document});
+  final bool isAdmin;
+  const DocumentCard({super.key, required this.document, this.isAdmin = false});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _DocumentCardState();
@@ -18,6 +21,7 @@ class _DocumentCardState extends ConsumerState<DocumentCard> {
   Widget build(BuildContext context) {
     final name = widget.document.name;
     final type = widget.document.type;
+    final hostId = widget.document.host;
     final location = widget.document.location;
     final date = timeago.format(DateTime.fromMillisecondsSinceEpoch(
         widget.document.foundAt.millisecondsSinceEpoch));
@@ -95,26 +99,60 @@ class _DocumentCardState extends ConsumerState<DocumentCard> {
                           fontWeight: FontWeight.bold, fontSize: 16)))
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                  onTap: () {
-                    // ref.read(deleteDocumentById(widget.document));
-                  },
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Palette.errorColor),
-                      child: const Text('Delete',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Palette.whiteColor,
-                              fontSize: 14))))
-            ],
-          )
+          if (widget.isAdmin)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      // ref.read(deleteDocumentById(widget.document));
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Palette.errorColor),
+                        child: const Text('Delete',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Palette.whiteColor,
+                                fontSize: 14))))
+              ],
+            )
+          else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      ref.watch(userDetailsProvider(hostId)).when(
+                          data: (user) {
+                            Navigator.push(context, ChatScreen.route(user!));
+                          },
+                          error: (err, st) => Container(),
+                          loading: () => Container());
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Palette.primaryColor),
+                        child: const Row(
+                          children: [
+                            Text('Message',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Palette.whiteColor,
+                                    fontSize: 16)),
+                            SizedBox(width: 10),
+                            Icon(Icons.send,
+                                size: 18, color: Palette.whiteColor)
+                          ],
+                        )))
+              ],
+            )
         ],
       ),
     );

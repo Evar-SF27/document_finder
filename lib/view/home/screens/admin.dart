@@ -74,7 +74,8 @@ class AdminHomePage extends ConsumerWidget {
                           scrollDirection: Axis.vertical,
                           itemCount: documents.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return DocumentCard(document: documents[index]);
+                            return DocumentCard(
+                                document: documents[index], isAdmin: true);
                           }),
                     );
                   },
