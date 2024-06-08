@@ -35,9 +35,9 @@ class _DocumentCardState extends ConsumerState<DocumentCard> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Palette.greyColor,
+                Color.fromARGB(255, 250, 235, 255),
                 Palette.whiteColor,
-                Palette.greyColor
+                Color.fromARGB(255, 250, 235, 255),
               ]),
           borderRadius: BorderRadius.circular(20)),
       child: Column(

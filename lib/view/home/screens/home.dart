@@ -81,7 +81,8 @@ class _UserHomePageState extends ConsumerState<UserHomePage> {
                     contentPadding: const EdgeInsets.all(10).copyWith(left: 20),
                     prefixIcon: const Icon(Icons.search),
                     filled: true,
-                    fillColor: Palette.greyColor.withOpacity(0.3),
+                    fillColor: const Color.fromARGB(255, 250, 235, 255)
+                        .withOpacity(0.9),
                     enabledBorder: textFieldBorder,
                     focusedBorder: textFieldBorder,
                     hintText: 'Search Places'),

@@ -40,6 +40,10 @@ class _MyAppState extends State<MyApp> {
       title: 'Finder',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          scaffoldBackgroundColor: const Color.fromARGB(255, 250, 240, 255),
+          appBarTheme: const AppBarTheme(
+              backgroundColor: Palette.primaryColor,
+              foregroundColor: Palette.whiteColor),
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ElevatedButton.styleFrom(
                   padding:

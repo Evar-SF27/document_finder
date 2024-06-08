@@ -1,10 +1,11 @@
-import 'dart:ffi';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finder/apis/chat.dart';
 import 'package:finder/common/widgets/loading.dart';
 import 'package:finder/common/widgets/error.dart';
 import 'package:finder/models/user.dart';
 import 'package:finder/theme/palette.dart';
 import 'package:finder/view/auth/controllers/auth.dart';
+import 'package:finder/view/chats/controllers/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,11 +35,37 @@ class ChatScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
-  late final User receiver;
-  late final User user;
+  final ChatAPI chatAPI = ChatAPI(db: FirebaseFirestore.instance);
+  final TextEditingController messageController = TextEditingController();
+
+  void sendMessage() async {
+    if (messageController.text.isNotEmpty) {
+      await ref
+          .watch(chatControllerProvider.notifier)
+          .sendMessage(widget.receiver.uid, messageController.text);
+      messageController.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.read(currentUserDetailsProvider).value!;
+
+    Widget _buildMessageItem(DocumentSnapshot document) {
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+      var alignment = (data['senderId'] == user.value!.uid)
+          ? Alignment.centerRight
+          : Alignment.centerLeft;
+
+      return Container(
+        alignment: alignment,
+        child: Column(
+          children: [Text(data['senderEmail']), Text(data['message'])],
+        ),
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Palette.primaryColor,
@@ -55,14 +82,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
         body: ref.watch(currentUserProvider).when(
             data: (user) {
-              return SingleChildScrollView(
-                child: Column(children: [
-                  Text('Hello'),
-                  Text('Hello'),
-                  Text('Hello'),
-                  Text('Hello'),
-                  Text('Hello'),
-                ]),
+              return StreamBuilder(
+                stream: chatAPI.getMessages(user!.uid, widget.receiver.uid),
+                builder: (context, snapshot) {
+                  print(snapshot.data!.docs);
+                  if (snapshot.hasError) {
+                    return Text('Error ${snapshot.error}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Text('Loading...');
+                  }
+                  return ListView(
+                    children: snapshot.data!.docs
+                        .map((document) => Text('data'))
+                        .toList(),
+                  );
+                },
               );
             },
             error: (error, stackTrace) => Error(error: error.toString()),
@@ -80,7 +116,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width - 75,
                 child: TextFormField(
-                    // controller: widget.controller,
+                    controller: messageController,
                     decoration: InputDecoration(
                         hintText: 'Type Message',
                         hintStyle: const TextStyle(fontSize: 18),
@@ -98,7 +134,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ),
               const SizedBox(width: 7),
               GestureDetector(
-                  onTap: () {},
+                  onTap: sendMessage,
                   child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
