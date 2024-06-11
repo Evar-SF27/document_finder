@@ -29,10 +29,10 @@ class ChatAPIController extends StateNotifier<bool> {
         message: message,
         dateTime: timestamp);
 
-    chatAPI.sendMessage(newMessage);
+    // chatAPI.sendMessage(newMessage, receiverId);
   }
 
-  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getMessaeges(
+  Future<Stream<QuerySnapshot>> getMessages(
       String userId, String receiverId) async {
     final stream = chatAPI.getMessages(userId, receiverId);
 

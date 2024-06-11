@@ -1,15 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finder/apis/chat.dart';
 import 'package:finder/theme/palette.dart';
-import 'package:finder/view/chats/screens/chats_screen.dart';
-import 'package:finder/view/home/admin/controllers/document.dart';
-import 'package:finder/view/home/widgets/document.dart';
+import 'package:finder/view/auth/controllers/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class UserHomePage extends ConsumerStatefulWidget {
+class AllChatScreen extends ConsumerStatefulWidget {
   static route() => PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            const UserHomePage(),
+            const AllChatScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;
@@ -24,19 +24,21 @@ class UserHomePage extends ConsumerStatefulWidget {
           );
         },
       );
-  const UserHomePage({super.key});
+  const AllChatScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _UserHomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _AllChatScreenState();
 }
 
-class _UserHomePageState extends ConsumerState<UserHomePage> {
-  var allDocuments = [];
-  var filteredDocuments = [];
+class _AllChatScreenState extends ConsumerState<AllChatScreen> {
+  final chatAPI =
+      ChatAPI(db: FirebaseFirestore.instance, auth: FirebaseAuth.instance);
+  var allUsers = [];
+  var filteredUsers = [];
   String _search = '';
-
   @override
   Widget build(BuildContext context) {
+    final currentUserId = ref.watch(currentUserProvider).value!.uid;
     final textFieldBorder = OutlineInputBorder(
         borderRadius: BorderRadius.circular(5),
         borderSide: BorderSide(
@@ -45,13 +47,13 @@ class _UserHomePageState extends ConsumerState<UserHomePage> {
 
     void applySearchFilters() {
       setState(() {
-        filteredDocuments = allDocuments.where((doc) {
+        filteredUsers = allUsers.where((doc) {
           bool filterByName =
               doc.name.toLowerCase().contains(_search.toLowerCase());
 
           return filterByName;
         }).toList();
-        // print(filteredDocuments);
+        // print(filteredUsers);
       });
     }
 
@@ -65,11 +67,11 @@ class _UserHomePageState extends ConsumerState<UserHomePage> {
                 onPressed: () {})
           ],
         ),
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Column(children: [
-            SizedBox(
+        body: Column(
+          children: [
+            Container(
               height: 60,
+              margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
               child: TextField(
                 onChanged: (value) {
                   _search = value.toString();
@@ -86,19 +88,13 @@ class _UserHomePageState extends ConsumerState<UserHomePage> {
                         .withOpacity(0.9),
                     enabledBorder: textFieldBorder,
                     focusedBorder: textFieldBorder,
-                    hintText: 'Search Places'),
+                    hintText: 'Search Chats'),
               ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Text('Reported Documents',
-                  style: GoogleFonts.abel(
-                      textStyle: const TextStyle(
-                          fontWeight: FontWeight.w900, fontSize: 24)))
-            ]),
             FutureBuilder(
                 future: ref
-                    .read(documentControllerProvider.notifier)
-                    .getDocuments(),
+                    .read(chatAPIProvider)
+                    .getChatRoomsForUser(currentUserId),
                 builder: (conttext, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for the Future to complete
@@ -110,29 +106,23 @@ class _UserHomePageState extends ConsumerState<UserHomePage> {
                     // Show an error message if the Future throws an error
                     return Text('Error(s): $snapshot');
                   } else {
-                    if (allDocuments.isEmpty) {
-                      allDocuments = snapshot.data!;
-                      filteredDocuments = List.from(allDocuments);
+                    if (allUsers.isEmpty) {
+                      allUsers = snapshot.data!;
+                      filteredUsers = List.from(allUsers);
                     }
                     return SizedBox(
                       height: MediaQuery.of(context).size.height - 217,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
-                          itemCount: filteredDocuments.length,
+                          itemCount: filteredUsers.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return DocumentCard(
-                                document: filteredDocuments[index]);
+                            return Text('Hello');
                           }),
                     );
                   }
                 })
-          ]),
-        ),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(context, AllChatScreen.route());
-            },
-            child: const Icon(Icons.chat_bubble)));
+          ],
+        ));
   }
 }
