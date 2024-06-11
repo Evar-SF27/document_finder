@@ -1,4 +1,7 @@
 import 'package:finder/theme/palette.dart';
+import 'package:finder/view/auth/controllers/auth.dart';
+import 'package:finder/view/auth/screens/login.dart';
+import 'package:finder/view/chats/screens/chats_screen.dart';
 import 'package:finder/view/home/admin/add.dart';
 import 'package:finder/view/home/admin/controllers/document.dart';
 import 'package:finder/view/home/widgets/document.dart';
@@ -33,9 +36,11 @@ class AdminHomePage extends ConsumerWidget {
           title: const Text('Document Finder'),
           actions: [
             IconButton(
-                icon:
-                    const Icon(Icons.supervised_user_circle_rounded, size: 40),
-                onPressed: () {})
+                icon: const Icon(Icons.logout, size: 34),
+                onPressed: () {
+                  ref.read(authControllerProvider.notifier).signOutUser();
+                  Navigator.push(context, LoginView.route());
+                })
           ],
         ),
         body: Container(
@@ -85,6 +90,9 @@ class AdminHomePage extends ConsumerWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, child: const Icon(Icons.chat_bubble)));
+            onPressed: () {
+              Navigator.push(context, AllChatScreen.route());
+            },
+            child: const Icon(Icons.chat_bubble)));
   }
 }

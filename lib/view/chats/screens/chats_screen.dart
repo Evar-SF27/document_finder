@@ -61,12 +61,6 @@ class _AllChatScreenState extends ConsumerState<AllChatScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Document Finder'),
-          actions: [
-            IconButton(
-                icon:
-                    const Icon(Icons.supervised_user_circle_rounded, size: 40),
-                onPressed: () {})
-          ],
         ),
         body: Column(
           children: [

@@ -63,40 +63,46 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       Map<String, dynamic> data = document.data() as Map<String, dynamic>;
       final DateTime dt = data['dateTime'].toDate();
       final time = formatTime(dt);
+      final sender = (data['sender'] == user.value!.uid);
 
-      var alignment = (data['senderId'] == user.value!.uid)
-          ? Alignment.centerRight
-          : Alignment.centerLeft;
+      var alignment = sender ? Alignment.centerRight : Alignment.centerLeft;
 
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+      return SizedBox(
+        width: 250,
         child: Container(
+          width: 250,
           padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+          margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
           decoration: BoxDecoration(
-              color: Palette.primaryColor,
+              color: sender
+                  ? Palette.primaryColor
+                  : Palette.blackColor.withOpacity(0.9),
               borderRadius: BorderRadius.circular(10)),
           alignment: alignment,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(data['message'],
-                  style: GoogleFonts.montserrat(
-                      textStyle: const TextStyle(
-                          color: Palette.whiteColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700))),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(time,
-                      style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                              color: Palette.whiteColor,
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold))),
-                ],
-              ),
-            ],
+          child: SizedBox(
+            width: 250,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(data['message'],
+                    style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                            color: Palette.whiteColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700))),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(time,
+                        style: GoogleFonts.montserrat(
+                            textStyle: const TextStyle(
+                                color: Palette.whiteColor,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold))),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -119,6 +125,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         body: Column(
           children: [
             Expanded(
+                // width: MediaQuery.of(context).size.width,
+                // height: MediaQuery.of(context).size.height - 200,
                 child: StreamBuilder(
               stream: chatAPI.getMessages(user.value!.uid, widget.receiver.uid),
               builder: (context, snapshot) {

@@ -44,4 +44,8 @@ class AuthAPI {
 
     return user;
   }
+
+  Future<void> logout() async {
+    await auth.signOut();
+  }
 }

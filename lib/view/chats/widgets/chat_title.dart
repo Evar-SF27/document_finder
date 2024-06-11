@@ -59,6 +59,8 @@ class _ChatTileState extends ConsumerState<ChatTile> {
                         )),
                     const SizedBox(width: 12),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(user.firstName,
                             style: const TextStyle(

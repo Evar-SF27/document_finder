@@ -44,6 +44,8 @@ class AuthController extends StateNotifier<bool> {
 
   Future<User?> currentUser() => authAPI.currentUser();
 
+  Future<void> signOutUser() => authAPI.logout();
+
   void register(
       {required String username,
       required String email,
