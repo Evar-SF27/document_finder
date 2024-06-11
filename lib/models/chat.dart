@@ -28,8 +28,8 @@ class ChatRoom {
 
   factory ChatRoom.fromMap(Map<String, dynamic> map) {
     return ChatRoom(
-      userId: map['userId'] as String,
-      currentId: map['currentId'] as String,
+      userId: map['user_id'] as String,
+      currentId: map['current_id'] as String,
     );
   }
 

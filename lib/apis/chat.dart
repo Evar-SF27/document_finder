@@ -55,17 +55,18 @@ class ChatAPI {
 
   Future<List<dynamic>> getChatRoomsForUser(String userId) async {
     try {
-      final querySnapshot = await db.collection('chats').get();
+      final docs = await db.collection('chats').get();
 
-      List<DocumentSnapshot> userChatRooms = querySnapshot.docs.where((doc) {
+      List<DocumentSnapshot> userChatRooms = docs.docs.where((doc) {
         List<String> ids = doc.id.split('_');
-        print(ids);
         return ids.contains(userId);
       }).toList();
 
-      print('documents $userChatRooms');
+      final rooms = userChatRooms
+          .map((room) => ChatRoom.fromMap(room.data() as Map<String, dynamic>))
+          .toList();
 
-      return userChatRooms;
+      return rooms;
     } catch (e) {
       print('Error getting chat rooms: $e');
       return [];

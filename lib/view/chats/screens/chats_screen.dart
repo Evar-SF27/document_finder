@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finder/apis/chat.dart';
 import 'package:finder/theme/palette.dart';
 import 'package:finder/view/auth/controllers/auth.dart';
+import 'package:finder/view/chats/widgets/chat_title.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +50,7 @@ class _AllChatScreenState extends ConsumerState<AllChatScreen> {
       setState(() {
         filteredUsers = allUsers.where((doc) {
           bool filterByName =
-              doc.name.toLowerCase().contains(_search.toLowerCase());
+              doc.userId.toLowerCase().contains(_search.toLowerCase());
 
           return filterByName;
         }).toList();
@@ -117,7 +118,7 @@ class _AllChatScreenState extends ConsumerState<AllChatScreen> {
                           scrollDirection: Axis.vertical,
                           itemCount: filteredUsers.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Text('Hello');
+                            return ChatTile(room: filteredUsers[index]);
                           }),
                     );
                   }
