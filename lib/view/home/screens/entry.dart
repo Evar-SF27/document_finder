@@ -8,8 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class EntryPage extends ConsumerWidget {
   static route() => PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const EntryPage(),
+        pageBuilder: (context, animation, secondaryAnimation) => EntryPage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;
@@ -28,14 +27,12 @@ class EntryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(currentUserDetailsProvider).when(
-        data: (user) {
-          final role = user.value!.role;
-          return role == 'user'
-              ? const UserHomePage()
-              : AdminHomePage(id: user.value!.uid);
-        },
-        error: (err, st) => Error(error: err.toString()),
-        loading: () => const Loader());
+    final curId = ref.watch(currentUserProvider).value!.uid;
+    print('cur $curId');
+    final user = ref.watch(currentUserDetailsProvider).value!;
+    print('user $user');
+    return user.value?.role == 'user'
+        ? UserHomePage()
+        : AdminHomePage(id: user.value!.uid);
   }
 }

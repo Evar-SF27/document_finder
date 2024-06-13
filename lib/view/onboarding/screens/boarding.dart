@@ -14,9 +14,8 @@ class BoardingScreen extends ConsumerStatefulWidget {
 class _BoardingScreenState extends ConsumerState<BoardingScreen> {
   @override
   Widget build(BuildContext context) {
-    final user = ref.read(currentUserProvider);
+    final user = ref.watch(currentUserProvider);
     final isUser = user.value?.uid;
-    return Scaffold(
-        body: isUser == null ? const LoginView() : const EntryPage());
+    return Scaffold(body: isUser == null ? const LoginView() : LoginView());
   }
 }
