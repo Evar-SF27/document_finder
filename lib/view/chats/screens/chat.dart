@@ -71,16 +71,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         width: 250,
         child: Container(
           width: 250,
-          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-          margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-          decoration: BoxDecoration(
-              color: sender
-                  ? Palette.primaryColor
-                  : Palette.blackColor.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(10)),
           alignment: alignment,
-          child: SizedBox(
+          child: Container(
             width: 250,
+            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+            margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+            decoration: BoxDecoration(
+                color: sender
+                    ? Palette.primaryColor
+                    : Palette.blackColor.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(10)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
